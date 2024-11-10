@@ -1,13 +1,12 @@
-import {AntDesign} from '@expo/vector-icons';
-import {CameraType, CameraView, useCameraPermissions, CameraCapturedPicture} from 'expo-camera';
-import {Audio} from 'expo-av';
-import {useRef, useState} from 'react';
-import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { CameraType, CameraView, useCameraPermissions, CameraCapturedPicture } from 'expo-camera';
+import { useRef, useState } from 'react';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000', // Dark background for a modern look
+        backgroundColor: '#000',
     },
     camera: {
         flex: 1,
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         position: 'absolute',
-        bottom: 100, // Adjusted to move up
+        bottom: 100,
         alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
@@ -42,18 +41,18 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#1e90ff', // Stylish blue
+        backgroundColor: '#1e90ff',
         borderRadius: 40,
         padding: 16,
-        elevation: 4, // Shadow effect for modern touch
+        elevation: 4,
     },
     uploadButton: {
         alignSelf: 'center',
         position: 'absolute',
-        bottom: 30, // Adjusted to center it above the bottom bar
+        bottom: 30,
         paddingVertical: 12,
         paddingHorizontal: 24,
-        backgroundColor: '#32cd32', // Fresh green color
+        backgroundColor: '#32cd32',
         borderRadius: 8,
         elevation: 3,
     },
@@ -65,23 +64,24 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function CameraScreen({navigation}: any) {
+export default function CameraScreen({ navigation }: any) {
     const [facing, setFacing] = useState<CameraType>('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [isCapturing, setIsCapturing] = useState(false);
     const cameraRef = useRef<CameraView | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState('Upload'); // Status for button text
     const [photoArray, setPhotoArray] = useState<CameraCapturedPicture[]>([]);
 
     if (!permission) {
-        return <View/>;
+        return <View />;
     }
 
     if (!permission.granted) {
         return (
             <View style={styles.container}>
-                <Text style={{textAlign: 'center'}}>We need your permission to show the camera</Text>
-                <Button onPress={requestPermission} title="Grant Permission"/>
+                <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
+                <Button onPress={requestPermission} title="Grant Permission" />
             </View>
         );
     }
@@ -95,7 +95,7 @@ export default function CameraScreen({navigation}: any) {
                 if (!cameraRef.current) break;
 
                 try {
-                    const options = {quality: 1, base64: true, exif: false};
+                    const options = { quality: 1, base64: true, exif: false };
                     const photo = await cameraRef.current.takePictureAsync(options);
                     if (photo) newPhotos.push(photo);
                     console.log(`Captured photo ${i} of 3`);
@@ -123,6 +123,7 @@ export default function CameraScreen({navigation}: any) {
 
         try {
             setIsLoading(true);
+            setUploadStatus('Uploading...');
             const response = await fetch('http://172.20.33.241:5000/img/predict', {
                 method: 'POST',
                 body: formData,
@@ -132,9 +133,14 @@ export default function CameraScreen({navigation}: any) {
             });
             const data = await response.json();
             console.log('Upload response:', data);
-            navigation.navigate('card', {data: data});
+            navigation.navigate('card', { data: data });
+            setUploadStatus('Uploaded');
         } catch (error) {
             console.error('Error uploading files:', error);
+            setUploadStatus('Upload Failed');
+        } finally {
+            setIsLoading(false);
+            setTimeout(() => setUploadStatus('Upload'), 3000); // Reset to 'Upload' after 3 seconds
         }
     };
 
@@ -148,12 +154,16 @@ export default function CameraScreen({navigation}: any) {
             <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={handleTakePhotos}>
-                        <AntDesign name="search1" size={32} color="white"/>
+                        <AntDesign name="search1" size={32} color="white" />
                     </TouchableOpacity>
                 </View>
             </CameraView>
-            <TouchableOpacity style={styles.uploadButton} onPress={sendFilesToAPI}>
-                <Text style={styles.uploadButtonText}>Upload Files</Text>
+            <TouchableOpacity
+                style={[styles.uploadButton, isLoading && { backgroundColor: '#ccc' }]}
+                onPress={sendFilesToAPI}
+                disabled={isLoading} // Disable button when uploading
+            >
+                <Text style={styles.uploadButtonText}>{uploadStatus}</Text>
             </TouchableOpacity>
         </View>
     );
