@@ -9,8 +9,8 @@ from panchi.img import img
 
 app = Flask(__name__)
 env = os.environ.get('ENV', 'dev')
-username = os.environ.get('DB_USER')
-password = os.environ.get('DB_PASS')
+username = os.environ.get('DB_USER', 'noobscience')
+password = os.environ.get('DB_PASS', 'NoobScience')
 if not username or not password:
     raise Exception("Database credentials not found")
 

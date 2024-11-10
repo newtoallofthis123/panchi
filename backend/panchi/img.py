@@ -1,9 +1,15 @@
+import wikipedia
 from flask import Blueprint, request, jsonify
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
+from brain.FetchInfo import fetch_bird_info
+from brain.pic_code import classify_image
+
 img = Blueprint('img', __name__, url_prefix='/img')
+class_indices = np.load('/home/noobscience/Projects/panchi/backend/brain/class_indices_033.npy',
+                        allow_pickle=True).item()
 
 
 def process_images(image_data):
@@ -32,30 +38,43 @@ def process_images(image_data):
 def predict():
     files = request.files.getlist('images')
     if len(files) != 3:
-        return "Please upload exactly 3 images.", 400
+        # return "Please upload exactly 3 images.", 400
+        print("Only got " + str(len(files)))
 
-    image_data = []
+    images = []
 
     for file in files:
         if file and file.filename != '':
-            file.stream.seek(0)
-            image_data.append(file.read())
+            name = file.filename
+            name = name.replace(" ", "_")
+            name = name.lower()
+            file.save('imgs/' + name)
+            images.append('/home/noobscience/Projects/panchi/backend/imgs/' + name)
 
-    if len(image_data) != 3:
-        return "Please upload exactly 3 images.", 400
+    if len(images) != 3:
+        # return "Please upload exactly 3 images.", 400
+        print("Only got " + str(len(files)))
 
-    img_arr = []
-    for img_data in image_data:
-        img_arr.append(np.frombuffer(img_data, np.uint8))
+    probabs = []
+    # for image in images:
+    probabs.append(classify_image(images[0], class_indices))
 
-    print(img_arr)
+    pred = max(probabs, key=lambda x: x[1])
+    name = pred[0]
+    name = name.replace('^[0-9A-Za-z] ', '_')
+    info = wikipedia.page(name)
+    img = info.images[0]
+    summary = wikipedia.summary(name)
 
-    # img_avg = np.mean(img_arr, axis=0)
-    # plt.imshow(img_avg)
-    # plt.axis('off')
-    # plt.savefig("exported_image.png", bbox_inches='tight', pad_inches=0)
-    # plt.close()
-    # img_avg = process_images(image_data)
-    # cv2.imwrite("averaged_image.png", img_avg)
+    res = {
+        'title': info.title,
+        'species': name,
+        'weight': '1.5 kg',
+        'url': info.url,
+        'summary': summary,
+        'img': img
+    }
 
-    return jsonify({'status': 'success'}), 200
+    print(res)
+
+    return jsonify({'status': 'success', 'predicted': [pred[0], str(pred[1])], 'res': res}), 200
