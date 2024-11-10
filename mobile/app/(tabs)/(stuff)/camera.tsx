@@ -70,7 +70,7 @@ export default function CameraScreen({ navigation }: any) {
     const [isCapturing, setIsCapturing] = useState(false);
     const cameraRef = useRef<CameraView | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [uploadStatus, setUploadStatus] = useState('Upload'); // Status for button text
+    const [uploadStatus, setUploadStatus] = useState('Upload'); 
     const [photoArray, setPhotoArray] = useState<CameraCapturedPicture[]>([]);
 
     if (!permission) {
@@ -140,7 +140,7 @@ export default function CameraScreen({ navigation }: any) {
             setUploadStatus('Upload Failed');
         } finally {
             setIsLoading(false);
-            setTimeout(() => setUploadStatus('Upload'), 3000); // Reset to 'Upload' after 3 seconds
+            setTimeout(() => setUploadStatus('Upload'), 3000); 
         }
     };
 
@@ -161,7 +161,7 @@ export default function CameraScreen({ navigation }: any) {
             <TouchableOpacity
                 style={[styles.uploadButton, isLoading && { backgroundColor: '#ccc' }]}
                 onPress={sendFilesToAPI}
-                disabled={isLoading} // Disable button when uploading
+                disabled={isLoading} 
             >
                 <Text style={styles.uploadButtonText}>{uploadStatus}</Text>
             </TouchableOpacity>
