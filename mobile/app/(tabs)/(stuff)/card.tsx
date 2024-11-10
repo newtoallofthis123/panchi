@@ -1,17 +1,61 @@
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import {ThemedText} from '@/components/ThemedText';
+// import ParallaxScrollView from '@/components/ParallaxScrollView';
+// import {ThemedText} from '@/components/ThemedText';
+// import BirdDetailCard from "@/components/BirdDetails";
+//
+// export default function CardScreen({route}: any) {
+//     const {data} = route.params;
+//
+//     return (
+//         <ParallaxScrollView
+//             headerBackgroundColor={{light: '#d2f45f', dark: '#7aad4e'}}
+//         >
+//             <ThemedText>This is the Card screen</ThemedText>
+//             <BirdDetailCard data={data}/>
+//             {/*<ThemedText>*/}
+//             {/*    {JSON.stringify(data)}*/}
+//             {/*</ThemedText>*/}
+//         </ParallaxScrollView>
+//     );
+// }
+//
+import {StatusBar} from 'expo-status-bar';
+import {StyleSheet, Text, View} from 'react-native';
+import BirdDetailCard from "@/components/BirdDetails";
+import {LinearGradient} from 'expo-linear-gradient';
 
 export default function CardScreen({route}: any) {
     const {data} = route.params;
-
     return (
-        <ParallaxScrollView
-            headerBackgroundColor={{light: '#d2f45f', dark: '#7aad4e'}}
+        <LinearGradient
+            colors={['#d2f45f', '#b8da52', '#7aad4e']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            style={styles.background}
         >
-            <ThemedText>This is the Card screen</ThemedText>
-            <ThemedText>
-                {data}
-            </ThemedText>
-        </ParallaxScrollView>
+            <View style={styles.container}>
+                <StatusBar style="auto"/>
+                <View>
+                    <BirdDetailCard data={data}/>
+
+                </View>
+            </View>
+        </LinearGradient>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    background: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        // rowGap: 20,
+    },
+});
