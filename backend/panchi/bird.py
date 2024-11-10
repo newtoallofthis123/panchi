@@ -2,7 +2,7 @@ from panchi.utils import hash_gen
 
 
 class Bird:
-    def __int__(self, name, species, img_url, description, wiki_url, info, endangered):
+    def __init__(self, name, species, img_url, description, wiki_url, info, endangered):
         self.name = name
         self.species = species
         self.img_url = img_url
@@ -29,6 +29,30 @@ class Bird:
         cursor.close()
 
         return bird_data['id']
+
+    @staticmethod
+    def search_by_name(name, conn):
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM birds WHERE name = %s", (name,))
+        result = cursor.fetchone()
+        res = {}
+
+        if result:
+            res['id'] = result[0]
+            res['name'] = result[1]
+            res['species'] = result[2]
+            res['img_url'] = result[3]
+            res['description'] = result[4]
+            res['wiki_url'] = result[5]
+            res['info'] = result[6]
+            res['endangered'] = result[7]
+
+            return res
+
+        cursor.close()
+
+        return None
 
     @staticmethod
     def get_info(id, conn):

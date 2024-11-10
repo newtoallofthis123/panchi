@@ -65,3 +65,26 @@ class Sighting:
         cursor.close()
 
         return None
+
+    @staticmethod
+    def get_by_user(user_id, conn):
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "SELECT * FROM sightings WHERE user_id = %s", (user_id,))
+        result = cursor.fetchall()
+
+        res = []
+
+        for r in result:
+            res.append({
+                'id': r[0],
+                'bird_id': r[1],
+                'user_id': r[2],
+                'location': r[3],
+                'created_at': r[4]
+            })
+
+        cursor.close()
+
+        return res
