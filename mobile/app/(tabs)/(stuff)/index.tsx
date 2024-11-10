@@ -19,7 +19,7 @@ export default function HomeScreen() {
             <View style={styles.buttonContainer}>
                 <Link href='/camera'>
                     <View style={styles.button}>
-                        <ThemedText style={{color: 'white', fontSize: 22}}>Play Now</ThemedText>
+                        <ThemedText style={{color: 'white', fontSize: 22}}>Catch Now!</ThemedText>
                     </View>
                 </Link>
             </View>

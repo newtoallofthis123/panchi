@@ -1,66 +1,81 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity, Button, Linking} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity, Button, Linking, ScrollView} from 'react-native';
 
 const BirdDetailCard = ({data}: any) => {
     const res = data['res'];
+    const bird_id = data['res']['id'];
+    const user_id = 'PwDyKSqM';
+
+    async function addSighting() {
+        const res = await fetch('http://172.20.33.241:5000/new/sighting', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                bird_id: bird_id,
+                user_id: user_id,
+                location: 'Hyderabad',
+            }),
+        });
+        const resData = await res.json();
+        console.log("Data Received: ", resData);
+    }
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.cpText}>{res['title']}</Text>
-            <View style={styles.imageContainer}>
-                <Image
-                    source={{uri: res['img']}}
-                    style={styles.birdImage}
-                />
-            </View>
-
-            <Text style={styles.birdName}>{res['title']}</Text>
-
-            <TouchableOpacity style={styles.transferButton}>
-                <Text style={styles.transferButtonText}>TRANSFER</Text>
-            </TouchableOpacity>
-
-            <View style={styles.statsContainer}>
-                <View style={styles.stat}>
-                    <Text style={styles.statLabel}>Species</Text>
-                    <Text style={styles.statValue}>{res['species']}</Text>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.container}>
+                <Text style={styles.cpText}>{res['title']}</Text>
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={{uri: res['img']}}
+                        style={styles.birdImage}
+                    />
                 </View>
 
-            </View>
+                <Text style={styles.birdName}>{res['title']}</Text>
 
-            {/* Power Up Section */}
-            <View style={styles.powerUpContainer}>
-                <Text style={styles.powerUpText}>
-                    {res['summary']}
-                </Text>
-                <TouchableOpacity style={styles.powerUpButton} onPress={() => {
-                    Linking.openURL(res['url']).catch((err) => {
-                        console.log(err)
-                    })
-                }}
-                >
-                    <Text style={{
-                        color: 'white',
-                    }}>Wikipedia</Text
-                    >
+                <TouchableOpacity style={styles.transferButton}>
+                    <Text style={styles.transferButtonText}>TRANSFER</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.powerUpButton}>
-                    <Text style={styles.powerUpButtonText}>CATCH</Text>
-                </TouchableOpacity>
+
+                <View style={styles.statsContainer}>
+                    <View style={styles.stat}>
+                        <Text style={styles.statLabel}>Species</Text>
+                        <Text style={styles.statValue}>{res['species']}</Text>
+                    </View>
+                </View>
+
+                <View style={styles.powerUpContainer}>
+                    <Text style={styles.powerUpText}>{res['summary']}</Text>
+                    <TouchableOpacity style={styles.powerUpButton} onPress={() => {
+                        Linking.openURL(res['url']).catch((err) => {
+                            console.log(err);
+                        });
+                    }}>
+                        <Text style={{color: 'white'}}>Wikipedia</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.powerUpButton} onPress={addSighting}>
+                        <Text style={styles.powerUpButtonText}>CATCH</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-
-
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
     container: {
         backgroundColor: 'white',
         padding: 20,
         alignItems: 'center',
         borderRadius: 20,
         margin: 10,
-        marginVertical: 40,
         shadowColor: '#000',
         shadowOpacity: 0.2,
         shadowOffset: {width: 0, height: 2},
@@ -91,11 +106,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333',
         marginTop: 10,
-    },
-    hpText: {
-        fontSize: 16,
-        color: '#77C9F5',
-        marginVertical: 5,
     },
     transferButton: {
         backgroundColor: '#2d6105',
@@ -129,7 +139,6 @@ const styles = StyleSheet.create({
     powerUpContainer: {
         width: '100%',
         backgroundColor: '#b8da52',
-        color: 'white',
         borderRadius: 20,
         padding: 15,
         alignItems: 'center',
@@ -151,14 +160,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
     },
-    link: {
-        backgroundColor: 'red',
-        color: 'white'
-    },
-    imgStyle: {
-        width: 'auto',
-        height: 10,
-    }
 });
 
 export default BirdDetailCard;

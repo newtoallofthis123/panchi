@@ -29,17 +29,6 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="random"
-                options={{
-                    title: 'Random',
-                    tabBarIcon: ({color, focused}) => (
-                        <TabBarIcon name={focused ? 'calendar-number-outline' : 'calendar'} color={'#d2f45f'} style={
-                            {color: '#d2f45f'}}
-                        />
-                    ),
-                }}
-            />
-            <Tabs.Screen
                 name="profile"
                 options={{
                     title: 'Profile',

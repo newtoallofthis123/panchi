@@ -1,23 +1,3 @@
-// import ParallaxScrollView from '@/components/ParallaxScrollView';
-// import {ThemedText} from '@/components/ThemedText';
-// import BirdDetailCard from "@/components/BirdDetails";
-//
-// export default function CardScreen({route}: any) {
-//     const {data} = route.params;
-//
-//     return (
-//         <ParallaxScrollView
-//             headerBackgroundColor={{light: '#d2f45f', dark: '#7aad4e'}}
-//         >
-//             <ThemedText>This is the Card screen</ThemedText>
-//             <BirdDetailCard data={data}/>
-//             {/*<ThemedText>*/}
-//             {/*    {JSON.stringify(data)}*/}
-//             {/*</ThemedText>*/}
-//         </ParallaxScrollView>
-//     );
-// }
-//
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, View} from 'react-native';
 import BirdDetailCard from "@/components/BirdDetails";
@@ -36,7 +16,6 @@ export default function CardScreen({route}: any) {
                 <StatusBar style="auto"/>
                 <View>
                     <BirdDetailCard data={data}/>
-
                 </View>
             </View>
         </LinearGradient>
