@@ -1,40 +1,38 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View} from 'react-native';
-import BirdDetailCard from "@/components/BirdDetails";
-import {LinearGradient} from 'expo-linear-gradient';
+import React from 'react';
+import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { ThemedText } from '@/components/ThemedText';
+import BirdDetailCard from '@/components/BirdDetailCard'; 
 
-export default function CardScreen({route}: any) {
-    const {data} = route.params;
-    return (
-        <LinearGradient
-            colors={['#d2f45f', '#b8da52', '#7aad4e']}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-            style={styles.background}
-        >
-            <View style={styles.container}>
-                <StatusBar style="auto"/>
-                <View>
-                    <BirdDetailCard data={data}/>
-                </View>
-            </View>
-        </LinearGradient>
-    );
+export default function CardScreen({ route }: any) {
+  const { data } = route.params; 
+  const { predicted, res } = data; 
+
+  const [birdName] = predicted; 
+  const { img, species, weight, url, summary } = res;
+
+  const cp = 100;  
+  const hp = 50;   
+  const type = species;  
+  const height = "0.2";  
+
+  // Log the values to debug
+  console.log('Bird Image:', img);
+  console.log('Summary:', summary);
+
+  return (
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: '#d2f45f', dark: '#7aad4e' }}
+    >
+      <BirdDetailCard
+        birdName={birdName}
+        birdImage={img}
+        species={species}
+        summary={summary}
+        weight={weight}
+        height={height}
+        url={url}
+        data={data}
+      />
+    </ParallaxScrollView>
+  );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    background: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
-        // rowGap: 20,
-    },
-});

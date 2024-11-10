@@ -37,8 +37,8 @@ const ProfilePage = ({data}: any) => {
                     source={{uri: 'http://noobscience.in/favicon.ico'}}
                     style={styles.profileImage}
                 />
-                <Text style={styles.profileName}>Rajesh Chatterjee</Text>
-                <Text style={styles.profileID}>#rjesh</Text>
+                <Text style={styles.profileName}>Ram Kishan </Text>
+                <Text style={styles.profileID}>#Rkishan</Text>
             </View>
 
             {/* Score Section */}
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         // borderWidth: 2,
-        // borderRadius: 12,
+        borderRadius: 12,
         // borderColor: '#0a0a0a',
     },
     profileSection: {
