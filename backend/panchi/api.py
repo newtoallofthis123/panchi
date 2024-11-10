@@ -210,9 +210,19 @@ def predict():
     pred = max(probabs, key=lambda x: x[1])
     name = pred[0]
 
-    name = name.replace('^[0-9A-Za-z] ', '_')
+    # name = name.replace('^[0-9A-Za-z] ', '_')
+    search = wikipedia.search(name)
+    if len(search) == 0:
+        return jsonify({'status': 'error', 'message': 'Bird not found'}), 404
+
+    name = search[0]
     info = wikipedia.page(name)
     img = info.images[0]
+
+    # HACK: Fix this hack
+    if name == 'Common Kingfisher':
+        img = 'https://upload.wikimedia.org/wikipedia/commons/7/72/Alcedo_azurea_-_Julatten.jpg'
+
     summary = wikipedia.summary(name)
 
     bird = Bird.search_by_name(name, db.get_conn())

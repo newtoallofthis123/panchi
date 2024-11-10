@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator, Button} from 'react-native';
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import ProfilePage from "@/components/Profile";
 
@@ -8,21 +8,20 @@ const BirdDetailCard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://172.20.33.241:5000/info/sightings/PwDyKSqM');
+            const result = await response.json();
+            setData(result);
+        } catch (error) {
+            // @ts-ignore
+            setError('Failed to load data');
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://172.20.33.241:5000/info/sightings/PwDyKSqM');
-                const result = await response.json();
-                setData(result);
-            } catch (error) {
-                // @ts-ignore
-                setError('Failed to load data');
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
     }, []);
 
@@ -40,6 +39,7 @@ const BirdDetailCard = () => {
         >
             <View style={styles.container}>
                 <ProfilePage data={data}/>
+                <Button title={'Refresh'} onPress={fetchData}/>
             </View>
         </ParallaxScrollView>
     );
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#4CAF50', // Background color
+        backgroundColor: '#f6f6f6', // Background color
         width: '100%',
         justifyContent: 'center',
         padding: 10,

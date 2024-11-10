@@ -1,9 +1,18 @@
-import React from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Linking} from 'react-native';
+import React, {useState} from 'react';
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    StyleSheet,
+    FlatList,
+    Linking,
+    Button,
+    VirtualizedList
+} from 'react-native';
 
 const ProfilePage = ({data}: any) => {
     const collectibles = data;
-
     // Render collectible card
     const renderCollectible = ({item}: any) => (
         <View style={styles.card}>
@@ -28,19 +37,24 @@ const ProfilePage = ({data}: any) => {
                     source={{uri: 'http://noobscience.in/favicon.ico'}}
                     style={styles.profileImage}
                 />
-                <Text style={styles.profileName}>NoobScience</Text>
-                <Text style={styles.profileID}>#noobscience</Text>
+                <Text style={styles.profileName}>Rajesh Chatterjee</Text>
+                <Text style={styles.profileID}>#rjesh</Text>
             </View>
 
             {/* Score Section */}
             <TouchableOpacity style={styles.scoreButton}>
-                <Text style={styles.scoreText}>Score</Text>
+                <Text style={styles.scoreText}>Score {(collectibles.length * 100)}</Text>
             </TouchableOpacity>
-
-            <FlatList
+            <VirtualizedList
                 data={collectibles}
                 renderItem={renderCollectible}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item: any) => item.id}
+                getItem={(data, index) => data[index]}
+                getItemCount={(data) => data.length}
+                contentContainerStyle={{
+                    alignItems: 'center',
+                    width: '100%',
+                }}
             />
         </View>
     );
@@ -49,10 +63,13 @@ const ProfilePage = ({data}: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#4CAF50',
+        // backgroundColor: '#f1f9f1',
         alignItems: 'center',
         width: '100%',
         justifyContent: 'center',
+        // borderWidth: 2,
+        // borderRadius: 12,
+        // borderColor: '#0a0a0a',
     },
     profileSection: {
         alignItems: 'center',
@@ -67,12 +84,12 @@ const styles = StyleSheet.create({
     profileName: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#FFFFFF',
+        color: '#000000',
         marginTop: 10,
     },
     profileID: {
         fontSize: 16,
-        color: '#FFFFFF',
+        color: '#000000',
         marginTop: 4,
     },
     scoreButton: {
