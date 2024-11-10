@@ -15,7 +15,7 @@ export default function CardScreen({ route }: any) {
   const type = species;  
   const height = "0.2";  
 
-  // Log the values to debug
+  
   console.log('Bird Image:', img);
   console.log('Summary:', summary);
 

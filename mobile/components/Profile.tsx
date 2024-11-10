@@ -13,7 +13,7 @@ import {
 
 const ProfilePage = ({data}: any) => {
     const collectibles = data;
-    // Render collectible card
+    
     const renderCollectible = ({item}: any) => (
         <View style={styles.card}>
             <Text style={styles.cardTitle}>{item['bird']['name']}</Text>
@@ -41,7 +41,7 @@ const ProfilePage = ({data}: any) => {
                 <Text style={styles.profileID}>#Rkishan</Text>
             </View>
 
-            {/* Score Section */}
+            
             <TouchableOpacity style={styles.scoreButton}>
                 <Text style={styles.scoreText}>Score {(collectibles.length * 100)}</Text>
             </TouchableOpacity>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         marginTop: 4,
     },
     scoreButton: {
-        backgroundColor: '#AEEA00', // Score button color
+        backgroundColor: '#AEEA00', 
         paddingVertical: 10,
         paddingHorizontal: 30,
         borderRadius: 20,
