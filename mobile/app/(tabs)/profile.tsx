@@ -11,7 +11,7 @@ const BirdDetailCard = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(BACKEND_URL + '/192.168.0.127:5000/info/sightings/PwDyKSqM');
+            const response = await fetch(BACKEND_URL + '/info/sightings/PwDyKSqM');
             const result = await response.json();
             setData(result);
         } catch (error) {

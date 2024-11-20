@@ -125,8 +125,9 @@ export default function CameraScreen({ navigation }: any) {
         try {
             setIsLoading(true);
             setUploadStatus('Uploading...');
-            const response = await fetch(BACKEND_URL + '/192.168.0.127:5000/img/predict', {
+            const response = await fetch(BACKEND_URL + '/img/predict', {
                 body: formData,
+                method: 'POST',
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

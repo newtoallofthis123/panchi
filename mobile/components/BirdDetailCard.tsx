@@ -6,7 +6,7 @@ const BirdDetailCard = ({ birdName, birdImage, summary, weight, height, url, spe
     const bird_id = data['res']['id'];
     const user_id = 'PwDyKSqM';
     async function addSighting() {
-        const res = await fetch(BACKEND_URL + '/192.168.0.127:5000/new/sighting', {
+        const res = await fetch(BACKEND_URL + '/new/sighting', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
