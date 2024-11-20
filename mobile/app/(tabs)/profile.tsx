@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ActivityIndicator, Button} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, Button } from 'react-native';
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import ProfilePage from "@/components/Profile";
+import { BACKEND_URL } from '@/constants/url';
 
 const BirdDetailCard = () => {
     const [data, setData] = useState(null);
@@ -10,7 +11,7 @@ const BirdDetailCard = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://172.20.33.241:5000/info/sightings/PwDyKSqM');
+            const response = await fetch(BACKEND_URL + '/192.168.0.127:5000/info/sightings/PwDyKSqM');
             const result = await response.json();
             setData(result);
         } catch (error) {
@@ -26,7 +27,7 @@ const BirdDetailCard = () => {
     }, []);
 
     if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff"/>;
+        return <ActivityIndicator size="large" color="#0000ff" />;
     }
 
     if (error) {
@@ -35,11 +36,11 @@ const BirdDetailCard = () => {
 
     return (
         <ParallaxScrollView
-            headerBackgroundColor={{light: '#d2f45f', dark: '#7aad4e'}}
+            headerBackgroundColor={{ light: '#d2f45f', dark: '#7aad4e' }}
         >
             <View style={styles.container}>
-                <ProfilePage data={data}/>
-                <Button title={'Refresh'} onPress={fetchData}/>
+                <ProfilePage data={data} />
+                <Button title={'Refresh'} onPress={fetchData} />
             </View>
         </ParallaxScrollView>
     );
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#f6f6f6', 
+        backgroundColor: '#f6f6f6',
         width: '100%',
         justifyContent: 'center',
         padding: 10,
